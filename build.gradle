@@ -21,6 +21,9 @@ repositories {
 dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'com.squareup.retrofit2:retrofit:2.7.0'
+	implementation 'com.squareup.retrofit2:converter-gson:2.7.0'
+	implementation 'com.squareup.retrofit2:converter-scalars:2.7.0'
 	compileOnly 'org.projectlombok:lombok'
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	annotationProcessor 'org.projectlombok:lombok'
