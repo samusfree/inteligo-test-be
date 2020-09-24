@@ -1,6 +1,7 @@
 package pe.inteligo.test.service.impl;
 
 import org.springframework.stereotype.Service;
+import pe.inteligo.test.dto.ExchangeRateDTO;
 import pe.inteligo.test.integration.api.CurrencyAPI;
 import pe.inteligo.test.integration.constants.APIConfiguration;
 import pe.inteligo.test.integration.dto.CurrencyResponse;
@@ -25,7 +26,7 @@ public class CurrencyServiceImpl implements CurrencyService, APIConfiguration {
     }
 
     @Override
-    public CurrencyResponse getCurrency() throws IOException {
+    public ExchangeRateDTO getCurrency() throws IOException {
         Call<CurrencyResponse> retrofitCall = currencyAPI.getCurrencyFromDolar("USD", "EUR,GBP");
 
         Response<CurrencyResponse> response = retrofitCall.execute();
@@ -35,6 +36,10 @@ public class CurrencyServiceImpl implements CurrencyService, APIConfiguration {
                     ? response.errorBody().string() : "Unknown error");
         }
 
-        return response.body();
+        CurrencyResponse responseObject = response.body();
+        ExchangeRateDTO exchangeRateDTO = new ExchangeRateDTO();
+        exchangeRateDTO.setEuroExchangeRate(responseObject.getRates().get("EUR").toString());
+        exchangeRateDTO.setPoundExchangeRate(responseObject.getRates().get("GBP").toString());
+        return exchangeRateDTO;
     }
 }

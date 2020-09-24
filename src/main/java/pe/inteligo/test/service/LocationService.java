@@ -1,10 +1,10 @@
 package pe.inteligo.test.service;
 
-import pe.inteligo.test.integration.dto.LocationPoint;
+import pe.inteligo.test.dto.LocationDTO;
 
 import java.io.IOException;
 import java.util.List;
 
 public interface LocationService {
-    List<LocationPoint> listLocationPoints() throws IOException;
+    List<LocationDTO> listLocationPoints() throws IOException;
 }

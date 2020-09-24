@@ -1,9 +1,9 @@
 package pe.inteligo.test.service;
 
-import pe.inteligo.test.integration.dto.CurrencyResponse;
+import pe.inteligo.test.dto.ExchangeRateDTO;
 
 import java.io.IOException;
 
 public interface CurrencyService {
-    CurrencyResponse getCurrency() throws IOException;
+    ExchangeRateDTO getCurrency() throws IOException;
 }
