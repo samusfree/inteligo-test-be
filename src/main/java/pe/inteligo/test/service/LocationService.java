@@ -6,5 +6,6 @@ import java.io.IOException;
 import java.util.List;
 
 public interface LocationService {
-    List<LocationDTO> listLocationPoints() throws IOException;
+
+    List<LocationDTO> listLocationPoints(String search) throws IOException;
 }

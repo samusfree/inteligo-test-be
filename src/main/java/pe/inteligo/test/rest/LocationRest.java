@@ -2,6 +2,7 @@ package pe.inteligo.test.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import pe.inteligo.test.dto.LocationDTO;
 import pe.inteligo.test.service.LocationService;
@@ -15,7 +16,7 @@ public class LocationRest {
     LocationService locationService;
 
     @GetMapping("/location/atm")
-    public List<LocationDTO> getAtms() throws IOException {
-        return locationService.listLocationPoints();
+    public List<LocationDTO> getAtms(@RequestParam(value = "search", required = false, defaultValue = "") String search) throws IOException {
+        return locationService.listLocationPoints(search);
     }
 }

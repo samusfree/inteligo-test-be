@@ -2,6 +2,7 @@ package pe.inteligo.test.service.impl;
 
 import com.google.gson.GsonBuilder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import pe.inteligo.test.dto.LocationDTO;
 import pe.inteligo.test.integration.api.LocationAPI;
 import pe.inteligo.test.integration.constants.APIConfiguration;
@@ -16,6 +17,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class LocationServiceImpl implements LocationService, APIConfiguration {
@@ -33,9 +35,12 @@ public class LocationServiceImpl implements LocationService, APIConfiguration {
     }
 
     @Override
-    public List<LocationDTO> listLocationPoints() throws IOException {
-        Call<List<LocationPoint>> retrofitCall = locationAPI.listAtms();
+    public List<LocationDTO> listLocationPoints(String search) throws IOException {
+        return getLocations(50, search);
+    }
 
+    private List<LocationDTO> getLocations(Integer size, String search) throws IOException {
+        Call<List<LocationPoint>> retrofitCall = locationAPI.listAtms();
         Response<List<LocationPoint>> response = retrofitCall.execute();
 
         if (!response.isSuccessful()) {
@@ -44,8 +49,16 @@ public class LocationServiceImpl implements LocationService, APIConfiguration {
         }
 
         List<LocationPoint> responseObject = response.body();
+        if (!StringUtils.isEmpty(search)) {
+            responseObject = responseObject.stream().filter(p ->
+                    p.getAddress().getStreet().toLowerCase().contains(search.toLowerCase()))
+                    .collect(Collectors.toList());
+        }
+
+        int i = 0;
         List<LocationDTO> list = new ArrayList<>();
         for (LocationPoint location : responseObject) {
+            i++;
             LocationDTO dto = new LocationDTO();
             dto.setLat(location.getAddress().getGeoLocation().getLat());
             dto.setLng(location.getAddress().getGeoLocation().getLng());
@@ -53,6 +66,7 @@ public class LocationServiceImpl implements LocationService, APIConfiguration {
                     location.getAddress().getCity() + ", CP: " +
                     location.getAddress().getPostalcode());
             list.add(dto);
+            if (i > size) break;
         }
         return list;
     }
